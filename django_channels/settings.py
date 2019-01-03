@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'base',
+    'users',
     'chat',
 ]
 
@@ -116,10 +118,22 @@ USE_L10N = True
 USE_TZ = True
 
 
+## Configuración para el logeo de usuarios
+
+LOGIN_URL = "/login"
+
+LOGOUT_URL= "/logout"
+
+
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
 
+## Configuración de los directorios en donde se encuentran los archivos estáticos
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static/'),
+)
+
 # Channels
-ASGI_APPLICATION = 'mysite.routing.application'
+ASGI_APPLICATION = 'django_channels.routing.application'

@@ -1,0 +1,129 @@
+body {
+     display: flex;
+     min-height: 100vh;
+     flex-direction: column;
+ }
+ main {
+     flex: 1 0 auto;
+ }
+ 
+/* Input colors */
+.input-field .prefix.active{
+    color: #009688;
+}
+
+.input-field input[type=text]:focus + label,
+.input-field input[type=password]:focus + label
+{
+  color: #009688;
+}
+.input-field input[type=text]:focus,
+.input-field input[type=password]:focus
+{
+  border-bottom: 1px solid #009688;
+  box-shadow: 0 1px 0 0 #009688;
+}
+
+.invalid input {
+    border-bottom: 1px solid #F44336;
+    box-shadow: 0 1px 0 0 #F44336;
+}
+
+.invalid label,.invalid  i, .errorlist, .danger {
+    color: #F44336;
+}
+
+.dropdown-content li>a, .dropdown-content li>span {
+    color: #009688;
+}
+
+[type="checkbox"]:checked+label:before {
+    border-right: 2px solid #009688;
+    border-bottom: 2px solid #009688;
+}
+
+#tiny{
+    font-size: 1rem;
+}
+
+a{
+    color: #009688;
+}
+
+.chat-box, .chat-log{
+    min-height: 400px;
+    max-height: 400px;
+    overflow: auto;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.chat-log .recived{
+    color: #FFF;
+    position: relative;
+    background: #80cbc4;
+    border: 4px solid #80cbc4;
+    padding: 2%;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.chat-log .recived:after,.chat-log .recived:before {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    position: absolute;
+    pointer-events: none;
+}
+
+.chat-log .recived::after {
+    border-color: rgba(128, 203, 196, 0);
+    border-right-color: #80cbc4;
+    border-width: 11px;
+    margin-top: -10px;
+}
+
+.chat-log .sended{
+    position: relative;
+    color: #FFF;
+    /*font-weight: bold;*/
+    background: #26a69a;
+    border: 4px solid #26a69a;
+    padding: 2%;
+    border-radius: 5px;
+    text-align: right;
+}
+
+.chat-log .sended:after,.chat-log .sended:before {
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    position: absolute;
+    pointer-events: none;
+}
+
+.chat-log .sended::after {
+    border-color: rgba(38, 166, 154, 0);
+    border-left-color: #26a69a;
+    border-width: 11px;
+    margin-top: -10px;
+}
+
+#mesages{
+    margin-left: 0px;
+    min-width: 2rem;
+}
+
+#mesages-new{
+    margin-left: 0px;
+    min-width: 2rem;
+    background-color: #26a69a;
+    border-radius: 50px;
+    color: white;
+}
+
+.selected{
+    background-color: rgb(153, 102, 255,1);
+}
