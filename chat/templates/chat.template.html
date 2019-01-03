@@ -1,0 +1,41 @@
+{% extends 'base.template.html' %}
+{% load staticfiles %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+    <div class="row">
+      <div class="col m2">
+        <div class="row center">Usuarios</div><hr/>
+        {% for user in users %}
+          <div class="row">
+            <a href="#" onclick="get_comment({{user.id}},{{request.user.id}})">
+              {{user.username}} <span class="badge" id="mesages" user-id="{{user.id}}">0</span>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="col m10">
+        <div class="row center">Chat</div><hr/>
+        <div class="chat-log">
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          <div class="chat-box" style="display:none;">
+            <input type="hidden" id="user_to"/>
+            
+            <div class="col m10">
+              <div class="input-field {% if form.comentario.errors %}invalid{% endif %}">
+                    {{ form.comentario }}
+                    <label for="icon_prefix {{ form.comentario.auto_id }}">Mensaje</label>
+                    {% include 'base.forms.errors.html' with form_errors=form.comentario.errors col_title_error='col s2' col_msg_error='col s10' %}
+                </div>
+            </div>
+            <div class="col m2">
+              <button class="btn-floating btn-large" id="send">
+                <i class="tiny material-icons prefix">send</i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+{% endblock %}

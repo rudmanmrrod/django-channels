@@ -1,14 +1,15 @@
 """
 Django Realtime Chat & Notifications
 """
-## @package base.urls
+## @package chat.urls
 #
 # Urls de la aplicación participacion
 # @version 1.0
 from django.urls import path
 from .views import *
 
-app_name = 'base'
+app_name = 'chat'
 urlpatterns = [
-    path('', Inicio.as_view(), name = "inicio")
+    path('', ChatView.as_view(), name = "chat"),
+    
 ]
