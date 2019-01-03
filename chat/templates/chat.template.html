@@ -17,25 +17,42 @@
         <div class="row center">Chat</div><hr/>
         <div class="chat-log">
         </div>
-        <form method="post">
-          {% csrf_token %}
-          <div class="chat-box" style="display:none;">
-            <input type="hidden" id="user_to"/>
-            
-            <div class="col m10">
-              <div class="input-field {% if form.comentario.errors %}invalid{% endif %}">
-                    {{ form.comentario }}
-                    <label for="icon_prefix {{ form.comentario.auto_id }}">Mensaje</label>
-                    {% include 'base.forms.errors.html' with form_errors=form.comentario.errors col_title_error='col s2' col_msg_error='col s10' %}
-                </div>
-            </div>
-            <div class="col m2">
-              <button class="btn-floating btn-large" id="send">
-                <i class="tiny material-icons prefix">send</i>
-              </button>
-            </div>
+        <div class="chat-box" style="display:none;">
+          <input type="hidden" id="user_to"/>
+          
+          <div class="col m10">
+            <div class="input-field {% if form.comentario.errors %}invalid{% endif %}">
+                  {{ form.comentario }}
+                  <label for="icon_prefix {{ form.comentario.auto_id }}">Mensaje</label>
+                  {% include 'base.forms.errors.html' with form_errors=form.comentario.errors col_title_error='col s2' col_msg_error='col s10' %}
+              </div>
           </div>
-        </form>
+          <div class="col m2">
+            <button class="btn-floating btn-large" id="send" onclick="sendMessage()">
+              <i class="tiny material-icons prefix">send</i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 {% endblock %}
+{% block extraJs %}
+<script>
+  var chatSocket = new WebSocket(
+  'ws://' + window.location.host + '/chat/');
+
+  chatSocket.onmessage = function(e) {
+    var data = JSON.parse(e.data);
+    var message = data['message'];
+    $('.chat-log').append(message);
+  };
+
+  chatSocket.onopen = function(e) {
+    console.info('Chat socket conected');
+  };
+
+  chatSocket.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+  };
+</script>
+{%endblock%}

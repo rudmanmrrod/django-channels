@@ -50,7 +50,7 @@ a{
     color: #009688;
 }
 
-.chat-box, .chat-log{
+.chat-log{
     min-height: 400px;
     max-height: 400px;
     overflow: auto;

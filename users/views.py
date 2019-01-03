@@ -52,7 +52,7 @@ class LoginView(FormView):
         if self.request.POST.get('remember_me') is not None:
             # Session expira a los dos meses si no se deslogea
             self.request.session.set_expiry(1209600)
-        return super(LoginView, self).form_valid(form)
+        return super().form_valid(form)
     
     
 class LogoutView(RedirectView):
