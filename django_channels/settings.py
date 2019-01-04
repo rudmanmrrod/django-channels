@@ -137,3 +137,16 @@ STATICFILES_DIRS = (
 
 # Channels
 ASGI_APPLICATION = 'django_channels.routing.application'
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'direccion_email@gmail.com'
+EMAIL_HOST_PASSWORD = 'pass******'
+EMAIL_FROM = EMAIL_HOST_USER
+
+# During production only
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# During development only
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

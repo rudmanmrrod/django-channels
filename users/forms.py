@@ -8,6 +8,7 @@ Django Realtime Chat & Notifications
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import (
     UserCreationForm
@@ -18,7 +19,7 @@ from django.forms.fields import (
 from django.forms.widgets import (
     PasswordInput, CheckboxInput
 )
-from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from base.functions import (
     validate_email, validate_username
     )
@@ -185,7 +186,7 @@ class PasswordConfirmForm(SetPasswordForm):
                                                   'placeholder': 'Repita su Contraseña'})
 
 
-class PasswordChangeForm(forms.Form):
+class PasswordChangeForms(forms.Form):
     """!
     Formulario de Registro
 
@@ -209,3 +210,15 @@ class PasswordChangeForm(forms.Form):
         widget=forms.TextInput(attrs={'type':'password'}),
         label="Repita su nueva contraseña"
         )
+
+
+class PasswordChangeAccount(PasswordChangeForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeAccount, self).__init__(*args, **kwargs)
+        self.fields['old_password'].widget.attrs.update({'class': 'input-field',
+                                                  'placeholder': 'Antigua contraseña'})
+        self.fields['new_password1'].widget.attrs.update({'class': 'input-field',
+                                                  'placeholder': 'Contraseña Nueva'})
+        self.fields['new_password2'].widget.attrs.update({'class': 'input-field',
+                                                  'placeholder': 'Repita su Contraseña'})     

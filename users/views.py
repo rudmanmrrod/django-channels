@@ -17,10 +17,11 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.hashers import check_password
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User, Group
+from django.contrib.auth import login
 from django.http import HttpResponseForbidden, JsonResponse
 from .forms import (
     LoginForm, UserRegisterForm, 
-    PasswordChangeForm
+    PasswordChangeForm, PasswordConfirmForm, PasswordChangeAccount
     )
 
 
@@ -91,16 +92,23 @@ class RegisterView(SuccessMessageMixin,CreateView):
     model = User
 
 
-class ChangePasswordView(LoginRequiredMixin,TemplateView):
+class ChangePasswordView(LoginRequiredMixin,FormView):
     """!
-    Clase que gestiona el borrado de una pregunta
+    Clase que gestion el cambio de contraseña
 
     @date 20-02-2018
     @version 1.0.0
     """
     template_name = "change_password.form.html"
-    
-    def post(self, request):
+    form_class = PasswordChangeAccount
+    success_url = reverse_lazy('base:inicio')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
         """!
         Metodo que sobreescribe la acción por POST
     
@@ -110,22 +118,10 @@ class ChangePasswordView(LoginRequiredMixin,TemplateView):
         @param pk <b>{int}</b> Recibe el id del perfil
         @return Retorna los datos de contexto
         """
-        perfil = Perfil.objects.filter(user_id=int(request.user.id))
-        if perfil:
-            perfil = perfil.get()
-            old_p = request.POST.get('old_password','')
-            new_p = request.POST.get('new_password','')
-            new_rp = request.POST.get('new_password_repeat','')
-            if old_p=='' or new_p=='' or new_rp=='':
-                return JsonResponse({'success':False,'mensaje':'Datos Vacíos'})
-            elif new_p != new_rp:
-                return JsonResponse({'success':False,'mensaje':'Las contraseñas no coinciden'})
-            elif not check_password(old_p,perfil.user.password):
-                return JsonResponse({'success':False,'mensaje':'La contraseña anterior es inválida'})
-            else:
-                perfil.user.set_password(new_p)
-                perfil.user.save()
-                return JsonResponse({'success':True,'mensaje':'Se cambió la contraseña con éxito'})
-        else:
-            return JsonResponse({'success':False,'mensaje':'Perfil Invalido'})
+        user = form.save()
+        try:
+            login(self.request, user)
+        except:
+            return super().form_valid(form)    
+        return super().form_valid(form)
 
