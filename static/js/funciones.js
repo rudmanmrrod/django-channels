@@ -39,14 +39,7 @@ function get_comment(author,user_logged){
 }
 
 function sendMessage(token,author,user_to,comentario){
-    chatSocket.send(JSON.stringify({
-        'comentario':comentario,
-        'fecha':'asdaf',
-        'fk_user_emite':author,
-        'fk_user_recibe':user_to,
-        'visto':false
-    }));  
-  /*$.ajax({
+  $.ajax({
         type: 'POST',
         url: URL_CREATE_COMMENT,
         data:{
@@ -66,5 +59,5 @@ function sendMessage(token,author,user_to,comentario){
               'visto':fields.visto
           }));  
         }
-    });*/
+    });
 }
