@@ -33,7 +33,7 @@ function get_comment(author,user_logged){
             $('.chat-log').html(html);
             $('#user_to').val(author);
             // bar posicion final
-            //$('.chat-log').scrollTop(9999999)   
+            $('.chat-log').scrollTop(9999999)   
         }
     });
 }
@@ -51,6 +51,7 @@ function sendMessage(token,author,user_to,comentario){
         success: function(response) {
           var data = JSON.parse(response);
           var fields = data[0].fields;
+          $('#id_comentario').val('');
           chatSocket.send(JSON.stringify({
               'comentario':fields.comentario,
               'fecha':fields.fecha,

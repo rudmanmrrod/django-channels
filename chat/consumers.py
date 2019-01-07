@@ -5,27 +5,26 @@ Django Realtime Chat & Notifications
 #
 # Consumer del web socket
 # @version 1.0
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 
-class ChatConsumer(WebsocketConsumer):
-    def connect(self):
-        async_to_sync(self.channel_layer.group_add)(
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.channel_layer.group_add(
             'chat',
             self.channel_name
         )
-        self.accept()
+        await self.accept()
 
-    def disconnect(self, close_code):
-        async_to_sync(self.channel_layer.group_discard)(
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
             'chat',
             self.channel_name
         )
 
-    def receive(self, text_data):
+    async def receive(self, text_data):
         # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
+        await self.channel_layer.group_send(
             'chat',
             {
                 'type': 'chat_message',
@@ -34,5 +33,5 @@ class ChatConsumer(WebsocketConsumer):
         )
 
      # Receive message from room group
-    def chat_message(self, event):
-        self.send(text_data=event['text_data'])
+    async def chat_message(self, event):
+        await self.send(text_data=event['text_data'])
