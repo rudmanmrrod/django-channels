@@ -18,8 +18,8 @@
         <div class="chat-log">
         </div>
         <div class="chat-box" style="display:none;">
+          {% csrf_token %}
           <input type="hidden" id="user_to"/>
-          
           <div class="col m10">
             <div class="input-field {% if form.comentario.errors %}invalid{% endif %}">
                   {{ form.comentario }}
@@ -28,7 +28,7 @@
               </div>
           </div>
           <div class="col m2">
-            <button class="btn-floating btn-large" id="send" onclick="sendMessage()">
+            <button class="btn-floating btn-large" id="send" onclick="testMsg()">
               <i class="tiny material-icons prefix">send</i>
             </button>
           </div>
@@ -43,8 +43,27 @@
 
   chatSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
-    var message = data['message'];
-    $('.chat-log').append(message);
+    if((data.fk_user_recibe==$("#user_to").val() && data.fk_user_emite=="{{user.id}}")
+      || (data.fk_user_emite==$("#user_to").val() && data.fk_user_recibe=="{{user.id}}") )
+    {
+      var send = data.visto ? 'done_all' :'done';
+      //var comment = value.fields.visible ? datos.comentario :'Este mensaje fue eliminado';
+      if(data.fk_user_emite=="{{user.id}}")
+      {
+        var position = "sended right";
+        send = 'done_all';
+      }
+      else{
+        var position = "recived left";
+      }
+      var html = '<div class="row">';
+      html += '<div class="'+position+'">'+data.comentario;
+      html += '<br/><i class="tiny material-icons prefix">'+send+'</i> | ';
+      html += '<small>'+ data.fecha +'</small></div>';
+      html += '</div>';
+      $('.chat-log').append(html);
+      //$('.chat-log').scrollTop($('.chat-log').scrollTop()+100)
+    }
   };
 
   chatSocket.onopen = function(e) {
@@ -54,5 +73,14 @@
   chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
   };
+
+  function testMsg(){
+    var token = $('input').val()
+    var user_to = $('#user_to').val()
+    var comentario = $('#id_comentario').val();
+    if (comentario!=''){
+      sendMessage(token,'{{user.id}}',user_to,comentario)
+    }
+  }
 </script>
 {%endblock%}

@@ -11,5 +11,6 @@ from .views import *
 app_name = 'chat'
 urlpatterns = [
     path('', ChatView.as_view(), name = "chat"),
-    
+    path('listar-comentarios', ListComment.as_view(), name="listar_comentarios"),
+    path('comentar', AddComment.as_view(), name="comentar"),
 ]
